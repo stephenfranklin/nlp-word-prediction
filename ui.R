@@ -1,4 +1,5 @@
 source("text-input.R")
+load("tot.freqs70fmin05w4cull.RData")
 
 shinyUI(fluidPage(
   titlePanel("Custom input example"),

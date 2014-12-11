@@ -13,6 +13,9 @@ shinyUI(pageWithSidebar(
         textOutput('text2'), ## watch the commas!
         br(),
         p('Output text3'),
-        textOutput('text3') ## watch the commas! 
+        textOutput('text3'), ## watch the commas!
+        br(),
+        p('Output text4'),
+        textOutput('text4') ## watch the commas!
     )
 ))

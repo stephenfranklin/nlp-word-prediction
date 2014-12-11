@@ -14,15 +14,43 @@ load("tot.freqs70fmin05w4cull.RData")
 ### That loads the data.table of 4grams and frequencies
 ### `tot.freqs_70_fmin05_w4_culled`
 
+random_4gram <- function(){
+    n_tot <- nrow(tot.freqs_70_fmin05_w4_culled)
+    randnum<-round(runif(1,1,n_tot),0)
+    r4gram <- tot.freqs_70_fmin05_w4_culled$ngrams[randnum]
+    r4gram
+}
+
 shinyServer(
     function(input, output) {
-        stuff <- reactive(tot.freqs_70_fmin05_w4_culled$ngrams[200])
         intext <- reactive({input$text1})
-        output$text1 <- renderText(intext()) ## no comma here
+        output$text1 <- renderText({
+            word <- predict_w4(intext(),tot.freqs_70_fmin05_w4_culled)
+            word[1]
+        })
         output$text2 <- renderText({
                 word <- predict_w4(intext(),tot.freqs_70_fmin05_w4_culled)
-                word[1]
+                word[2]
         })
-        output$text4 <- renderText(stuff()) ## no comma here
+        output$text3 <- renderText({
+            word <- predict_w4(intext(),tot.freqs_70_fmin05_w4_culled)
+            word[3]
+        })
+        output$text4 <- renderText({
+            word <- predict_w4(intext(),tot.freqs_70_fmin05_w4_culled)
+            word[4]
+        })
+        output$text5 <- renderText({
+            word <- predict_w4(intext(),tot.freqs_70_fmin05_w4_culled)
+            word[5]
+        })
+        output$text6 <- renderText({
+            word <- predict_w4(intext(),tot.freqs_70_fmin05_w4_culled)
+            word[6]
+        })
+        output$text7 <- renderText({
+            if (input$random.btn==0) random_4gram()
+            else random_4gram()
+        })
     }
 )

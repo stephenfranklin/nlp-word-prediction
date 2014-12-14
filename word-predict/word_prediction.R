@@ -139,6 +139,7 @@ predict_unigrams <- function(input.dt, ngram4.dt){
 }
 
 predict_w4 <- function(input_text, ngram4.dt){
+    input.dt <- data.table(w1="",w2="",w3="")
     input.dt <- process_input(input_text)
     ## predict for 1, 2, or 3+ input words ##
     if(is.na(input.dt$w2)){

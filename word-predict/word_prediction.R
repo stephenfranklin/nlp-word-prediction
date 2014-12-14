@@ -21,6 +21,7 @@ library(data.table)
 #source("tot.freqs70fmin05w4cull.RData")
 
 process_input <- function(input_text){
+    input.dt <- data.table(w1="",w2="",w3="")
     ### 1. Preprocesses text.
     ### 2. Checks for number of words.
     ### Returns as data.table, NAs for missing words.
@@ -139,7 +140,6 @@ predict_unigrams <- function(input.dt, ngram4.dt){
 }
 
 predict_w4 <- function(input_text, ngram4.dt){
-    input.dt <- data.table(w1="",w2="",w3="")
     input.dt <- process_input(input_text)
     ## predict for 1, 2, or 3+ input words ##
     if(is.na(input.dt$w2)){

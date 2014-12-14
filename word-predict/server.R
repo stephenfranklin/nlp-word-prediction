@@ -27,6 +27,7 @@ shinyServer(
             if (input$random.btn==0) random_4gram()
             else random_4gram()
         })
+
         intext <- reactive({input$text1})
         word <- reactive(predict_w4(intext(),tot.freqs))
         output$text1 <- renderText({word()[1]})      

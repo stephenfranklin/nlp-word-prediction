@@ -3,7 +3,10 @@ shinyUI(pageWithSidebar(
     sidebarPanel(
         textInput(inputId="text1", label = "Enter text here"),
         tags$head(tags$style(type="text/css", "#text1 {width: 90%}")),
-        actionButton('random.btn', 'Random 4gram')
+        br(),
+        actionButton('random.btn', 'Random 4gram'),
+        p(),
+        textOutput('text7')
         ),
     mainPanel(
         p('Top prediction:'),
@@ -22,9 +25,6 @@ shinyUI(pageWithSidebar(
         textOutput('text5'), ## watch the commas!
         br(),
         p('6th:'),
-        textOutput('text6'), ## watch the commas!
-        br(),
-        p('Random 4gram'),
-        textOutput('text7') ## watch the commas!
+        textOutput('text6') ## watch the commas!
     )
 ))

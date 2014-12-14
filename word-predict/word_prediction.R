@@ -49,7 +49,7 @@ predict_trigrams <- function(input.dt, ngram4.dt){
     ### Returns top3grams, column w4 by frequency.
 setkey(ngram4.dt,w1,w2,w3)
 top3grams <- ngram4.dt[.(input.dt$w1,input.dt$w2,input.dt$w3)]
-top3grams <- top3grams[order(-tots)]$w4
+top3grams <- top3grams[order(-tots)]
 top3grams$w4
 }
 
@@ -65,7 +65,7 @@ predict_bigrams <- function(input.dt, ngram4.dt){
     top12grams <- top12grams[,ngrams:=NULL]
     top12grams <- top12grams[,w4:=NULL]
     setkey(top12grams,w1,w2,w3)
-    top12s <- top12grams[,sum(tots),by=(w3)]
+    top12s <- top12grams[,sum(tots),by=w3]
     top12s <- top12s[order(-V1)]
     
     ### bigrams input w2 & w3 to w2 & w3, returning w4 ###
@@ -75,18 +75,18 @@ predict_bigrams <- function(input.dt, ngram4.dt){
     top23grams <- top23grams[,ngrams:=NULL]
     top23grams <- top23grams[,w1:=NULL]
     setkey(top23grams,w2,w3,w4)
-    top23s <- top23grams[,sum(tots),by=(w4)]
+    top23s <- top23grams[,sum(tots),by=w4]
     top23s <- top23s[order(-V1)]
     
     ### Combine results ###
     setnames(top12s, "w3", "w4")
     top_bigrams <- rbind(top12s,top23s)
-    top_bigrams <- top_bigrams[,sum(V1),by=(w4)]
+    top_bigrams <- top_bigrams[,sum(V1),by=w4]
     top_bigrams <- top_bigrams[order(-V1)]
     top_bigrams$w4
 }
 
-pred1 <- function(w){
+pred1 <- function(w,input.dt,ngram4.dt){
     ### To be used within `predict_unigrams()`.
     ### w is the column to predict from: "w1", "w2", or "w3"
     ### the subsequent column will be returned by frequency.
@@ -120,18 +120,16 @@ predict_unigrams <- function(input.dt, ngram4.dt){
     ### Compare the input unigram (last word) 
     ### to every combo of unigrams: columns 1, 2, & 3.
     ### Returns top_unigrams: w2, w3, w4 by frequency (w2 & w3 renamed to w4).
-cat(print(head(ngram4.dt)))
-    
     
     ### predict w4 from w3 ###
-    top1s4 <- pred1("w3")
-    head(top1s4)
+    top1s4 <- pred1("w3",input.dt,ngram4.dt)
+    #head(top1s4)
     ### predict w3 from w2 ###
-    top1s3 <- pred1("w2")
-    head(top1s3)
+    top1s3 <- pred1("w2",input.dt,ngram4.dt)
+    #head(top1s3)
     ### predict w2 from w1 ###
-    top1s2 <- pred1("w1")
-    head(top1s2)
+    top1s2 <- pred1("w1",input.dt,ngram4.dt)
+    #head(top1s2)
     ### Combine results ###
     top_unigrams <- rbind(top1s4,top1s3)
     top_unigrams <- rbind(top_unigrams,top1s2)
@@ -141,14 +139,21 @@ cat(print(head(ngram4.dt)))
 }
 
 predict_w4 <- function(input_text, ngram4.dt){
-        input.dt <- process_input(input_text)
+    input.dt <- process_input(input_text)
+    ## predict for 1, 2, or 3+ input words ##
+    if(is.na(input.dt$w2)){
+        tops <- predict_unigrams(input.dt, ngram4.dt)
+    } else if(is.na(input.dt$w1)){
+        tops <- predict_bigrams(input.dt, ngram4.dt)
+        ## back off if empty ##
+        if(is.na(tops[1])) tops <- predict_unigrams(input.dt, ngram4.dt)
+    } else {
         tops <- predict_trigrams(input.dt, ngram4.dt)
-#    if(is.na(input.dt$w2)){
-#       if(is.na(input.dt$w1)){
-#           tops <- predict_unigrams(input.dt, ngram4.dt)
-#        } else tops <- predict_bigrams(input.dt, ngram4.dt)
-#    } else {
-#        tops <- predict_trigrams(input.dt, ngram4.dt)
-#    }
+        ## back off if empty ##
+        if(is.na(tops[1])) {
+            tops <- predict_bigrams(input.dt, ngram4.dt)  
+            if(is.na(tops[1])) tops <- predict_unigrams(input.dt, ngram4.dt)
+        }
+    }
     tops
 }

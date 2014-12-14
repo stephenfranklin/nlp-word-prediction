@@ -24,30 +24,13 @@ random_4gram <- function(){
 shinyServer(
     function(input, output) {
         intext <- reactive({input$text1})
-        output$text1 <- renderText({
-            word <- predict_w4(intext(),tot.freqs)
-            word[1]
-        })
-        output$text2 <- renderText({
-                word <- predict_w4(intext(),tot.freqs)
-                word[2]
-        })
-        output$text3 <- renderText({
-            word <- predict_w4(intext(),tot.freqs)
-            word[3]
-        })
-        output$text4 <- renderText({
-            word <- predict_w4(intext(),tot.freqs)
-            word[4]
-        })
-        output$text5 <- renderText({
-            word <- predict_w4(intext(),tot.freqs)
-            word[5]
-        })
-        output$text6 <- renderText({
-            word <- predict_w4(intext(),tot.freqs)
-            word[6]
-        })
+        wordtest <- reactive(predict_w4(intext(),tot.freqs))
+        output$text1 <- renderText({wordtest()[1]})
+        output$text2 <- renderText({wordtest()[2]})
+        output$text3 <- renderText({wordtest()[3]})
+        output$text4 <- renderText({wordtest()[4]})
+        output$text5 <- renderText({wordtest()[5]})
+        output$text6 <- renderText({wordtest()[6]})
         output$text7 <- renderText({
             if (input$random.btn==0) random_4gram()
             else random_4gram()

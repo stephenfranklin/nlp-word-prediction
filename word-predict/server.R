@@ -22,19 +22,50 @@ random_4gram <- function(){
 }
 
 shinyServer(
-    function(input, output) {
+    function(input, output, session) {
         output$text7 <- renderText({
             if (input$random.btn==0) random_4gram()
             else random_4gram()
         })
-
+        
         intext <- reactive({input$text1})
         word <- reactive(predict_w4(intext(),tot.freqs))
+        
         output$text1 <- renderText({word()[1]})      
         output$text2 <- renderText({word()[2]})
         output$text3 <- renderText({word()[3]})
         output$text4 <- renderText({word()[4]})
         output$text5 <- renderText({word()[5]})
         output$text6 <- renderText({word()[6]})
-    }
+    
+    output$uiOutputPanel <- renderUI({
+        button1Click <- paste("$('#text1').val($('#text1').val() + '",
+                              word()[1], " ", "').trigger('change'); var input =
+                          $('#text1'); input[0].selectionStart =
+                          input[0].selectionEnd = input.val().length;",
+                              sep='')
+        button2Click <- paste("$('#text1').val($('#text1').val() + '",
+                              word()[2], " ", "').trigger('change'); var input =
+                          $('#text1'); input[0].selectionStart =
+                          input[0].selectionEnd = input.val().length;",
+                              sep='')
+        button3Click <- paste("$('#text1').val($('#text1').val() + '",
+                              word()[3], " ", "').trigger('change'); var input =
+                          $('#text1'); input[0].selectionStart =
+                          input[0].selectionEnd = input.val().length;",
+                              sep='')
+        
+        tags$div(
+            tags$button(type="button", id="word()[1]", word()[1],
+                        class="btn action-button shiny-bound-input",
+                        onclick=button1Click, accesskey="Ctrl + 1")
+            ,tags$button(type="button", id="word()[2]", word()[2],
+                         class="btn action-button shiny-bound-input",
+                         onclick=button2Click)
+            ,tags$button(type="button", id="word()[3]", word()[3],
+                         class="btn action-button shiny-bound-input",
+                         onclick=button3Click)
+        )
+    })
+    }    
 )

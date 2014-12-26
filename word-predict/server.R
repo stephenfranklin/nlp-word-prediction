@@ -21,7 +21,8 @@ random_4gram <- function(){
     r4gram
 }
 
-insert_word <- function(word){
+fix_apo <- function(word){
+    ## fix the apostrophe in contractions.
     wordN <- ifelse(grepl("'",word),sub("'", "\\'",word,fixed=T),word)
     wordN
 }
@@ -36,6 +37,14 @@ na2common <- function(word,N){
     word
 }
 
+na2commons <- function(word){
+    commons <- c("the", "be", "to", "of", "and", "a")
+    for(i in 1:length(word))
+        if(is.na(word[i]) | grepl("^na$",word[i], ignore.case=T))
+            word[i] <- commons[i]
+    word
+}
+
 shinyServer(
     function(input, output, session) {
         output$text7 <- renderText({
@@ -45,32 +54,33 @@ shinyServer(
         
         intext <- reactive({input$text1})
         word <- reactive(predict_w4(intext(),tot.freqs)[1:3])
+        worda <- reactive( na2commons(word()) )
         
     output$uiOutputPanel <- renderUI({
         button1Click <- paste("$('#text1').val($('#text1').val() + '",
-                              na2common(insert_word(word()[1]),1), " ", "').trigger('change'); var input =
+                              fix_apo(worda()[1]), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         button2Click <- paste("$('#text1').val($('#text1').val() + '",
-                              na2common(insert_word(word()[2]),2), " ", "').trigger('change'); var input =
+                              fix_apo(worda()[2]), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         button3Click <- paste("$('#text1').val($('#text1').val() + '",
-                              na2common( insert_word(word()[3]),3), " ", "').trigger('change'); var input =
+                              fix_apo(worda()[3]), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         
         tags$div(
-            tags$button(type="button", id="word()[1]", na2common(word()[1],1),
+            tags$button(type="button", id="word()[1]", worda()[1],
                         class="btn action-button shiny-bound-input",
                         onclick=button1Click, accesskey="Ctrl + 1")
-            ,tags$button(type="button", id="word()[2]", na2common(word()[2],2),
+            ,tags$button(type="button", id="word()[2]", worda()[2],
                          class="btn action-button shiny-bound-input",
                          onclick=button2Click)
-            ,tags$button(type="button", id="word()[3]", na2common(word()[3],3),
+            ,tags$button(type="button", id="word()[3]", worda()[3],
                          class="btn action-button shiny-bound-input",
                          onclick=button3Click)
         )

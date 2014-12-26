@@ -26,6 +26,16 @@ insert_word <- function(word){
     wordN
 }
 
+na2common <- function(word,N){
+    ## N is the index of commons
+    ## which if word is a list should match the index of word
+    ## "put_common(word[6],6)"
+    commons <- c("the", "be", "to", "of", "and", "a")
+    if(is.na(word) | grepl("^na$",word, ignore.case=T))
+        word <- commons[N]
+    word
+}
+
 shinyServer(
     function(input, output, session) {
         output$text7 <- renderText({
@@ -45,29 +55,29 @@ shinyServer(
         
     output$uiOutputPanel <- renderUI({
         button1Click <- paste("$('#text1').val($('#text1').val() + '",
-                              insert_word(word()[1]), " ", "').trigger('change'); var input =
+                              na2common(insert_word(word()[1]),1), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         button2Click <- paste("$('#text1').val($('#text1').val() + '",
-                              insert_word(word()[2]), " ", "').trigger('change'); var input =
+                              na2common(insert_word(word()[2]),2), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         button3Click <- paste("$('#text1').val($('#text1').val() + '",
-                              insert_word(word()[3]), " ", "').trigger('change'); var input =
+                              na2common( insert_word(word()[3]),3), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         
         tags$div(
-            tags$button(type="button", id="word()[1]", word()[1],
+            tags$button(type="button", id="word()[1]", na2common(word()[1],1),
                         class="btn action-button shiny-bound-input",
                         onclick=button1Click, accesskey="Ctrl + 1")
-            ,tags$button(type="button", id="word()[2]", word()[2],
+            ,tags$button(type="button", id="word()[2]", na2common(word()[2],2),
                          class="btn action-button shiny-bound-input",
                          onclick=button2Click)
-            ,tags$button(type="button", id="word()[3]", word()[3],
+            ,tags$button(type="button", id="word()[3]", na2common(word()[3],3),
                          class="btn action-button shiny-bound-input",
                          onclick=button3Click)
         )

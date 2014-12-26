@@ -27,16 +27,6 @@ fix_apo <- function(word){
     wordN
 }
 
-na2common <- function(word,N){
-    ## N is the index of commons
-    ## which if word is a list should match the index of word
-    ## "put_common(word[6],6)"
-    commons <- c("the", "be", "to", "of", "and", "a")
-    if(is.na(word) | grepl("^na$",word, ignore.case=T))
-        word <- commons[N]
-    word
-}
-
 na2commons <- function(word){
     commons <- c("the", "be", "to", "of", "and", "a")
     for(i in 1:length(word))

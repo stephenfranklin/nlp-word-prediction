@@ -44,14 +44,7 @@ shinyServer(
         })
         
         intext <- reactive({input$text1})
-        word <- reactive(predict_w4(intext(),tot.freqs))
-        
-        output$text1 <- renderText({word()[1]})      
-        output$text2 <- renderText({word()[2]})
-        output$text3 <- renderText({word()[3]})
-        output$text4 <- renderText({word()[4]})
-        output$text5 <- renderText({word()[5]})
-        output$text6 <- renderText({word()[6]})
+        word <- reactive(predict_w4(intext(),tot.freqs)[1:3])
         
     output$uiOutputPanel <- renderUI({
         button1Click <- paste("$('#text1').val($('#text1').val() + '",

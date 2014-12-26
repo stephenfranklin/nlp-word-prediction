@@ -21,6 +21,11 @@ random_4gram <- function(){
     r4gram
 }
 
+insert_word <- function(word){
+    wordN <- ifelse(grepl("'",word),sub("'", "\\'",word,fixed=T),word)
+    wordN
+}
+
 shinyServer(
     function(input, output, session) {
         output$text7 <- renderText({
@@ -37,17 +42,6 @@ shinyServer(
         output$text4 <- renderText({word()[4]})
         output$text5 <- renderText({word()[5]})
         output$text6 <- renderText({word()[6]})
-    
-insert_word <- function(word){
-    wordN <- ifelse(grepl("'",word),sub("'", "\\\\'",word,fixed=T),word)
-    wordN
-}
-#iw <- function(word){
-#    ## N is the index in 'word()[N]'
-#    wN <- ifelse(grepl("'",word),sub("'", "\\\\'",word, fixed=T),word)
-#    wN
-#}
-
         
     output$uiOutputPanel <- renderUI({
         button1Click <- paste("$('#text1').val($('#text1').val() + '",
@@ -56,12 +50,12 @@ insert_word <- function(word){
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         button2Click <- paste("$('#text1').val($('#text1').val() + '",
-                              word()[2], " ", "').trigger('change'); var input =
+                              insert_word(word()[2]), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')
         button3Click <- paste("$('#text1').val($('#text1').val() + '",
-                              word()[3], " ", "').trigger('change'); var input =
+                              insert_word(word()[3]), " ", "').trigger('change'); var input =
                           $('#text1'); input[0].selectionStart =
                           input[0].selectionEnd = input.val().length;",
                               sep='')

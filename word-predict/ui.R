@@ -8,8 +8,6 @@ shinyUI(pageWithSidebar(
         actionButton('random.btn', 'Random 4gram'),
         p(),
         textOutput('text7')
-        ,p()
-        ,textOutput('text_endspace')
         ),
     mainPanel(
         uiOutput("uiOutputPanel")

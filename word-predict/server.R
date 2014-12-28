@@ -45,35 +45,38 @@ shinyServer(
         intext <- reactive({input$text1})
         word <- reactive(predict_w4(intext(),tot.freqs)[1:3])
         worda <- reactive( na2commons(word()) )
+        end_space <- reactive( grepl(" $", intext()) )
         
-    output$uiOutputPanel <- renderUI({
-        button1Click <- paste("$('#text1').val($('#text1').val() + '",
-                              fix_apo(worda()[1]), " ", "').trigger('change'); var input =
-                          $('#text1'); input[0].selectionStart =
-                          input[0].selectionEnd = input.val().length;",
-                              sep='')
-        button2Click <- paste("$('#text1').val($('#text1').val() + '",
-                              fix_apo(worda()[2]), " ", "').trigger('change'); var input =
-                          $('#text1'); input[0].selectionStart =
-                          input[0].selectionEnd = input.val().length;",
-                              sep='')
-        button3Click <- paste("$('#text1').val($('#text1').val() + '",
-                              fix_apo(worda()[3]), " ", "').trigger('change'); var input =
-                          $('#text1'); input[0].selectionStart =
-                          input[0].selectionEnd = input.val().length;",
-                              sep='')
+        output$text_endspace <- renderText(end_space())
         
-        tags$div(
-            tags$button(type="button", id="word()[1]", worda()[1],
-                        class="btn action-button shiny-bound-input",
-                        onclick=button1Click, accesskey="Ctrl + 1")
-            ,tags$button(type="button", id="word()[2]", worda()[2],
-                         class="btn action-button shiny-bound-input",
-                         onclick=button2Click)
-            ,tags$button(type="button", id="word()[3]", worda()[3],
-                         class="btn action-button shiny-bound-input",
-                         onclick=button3Click)
-        )
-    })
+        output$uiOutputPanel <- renderUI({
+            button1Click <- paste("$('#text1').val($('#text1').val() + '",
+                                  fix_apo(worda()[1]), " ", "').trigger('change'); var input =
+                          $('#text1'); input[0].selectionStart =
+                          input[0].selectionEnd = input.val().length;",
+                                  sep='')
+            button2Click <- paste("$('#text1').val($('#text1').val() + '",
+                                  fix_apo(worda()[2]), " ", "').trigger('change'); var input =
+                          $('#text1'); input[0].selectionStart =
+                          input[0].selectionEnd = input.val().length;",
+                                  sep='')
+            button3Click <- paste("$('#text1').val($('#text1').val() + '",
+                                  fix_apo(worda()[3]), " ", "').trigger('change'); var input =
+                          $('#text1'); input[0].selectionStart =
+                          input[0].selectionEnd = input.val().length;",
+                                  sep='')
+            
+            tags$div(
+                tags$button(type="button", id="word()[1]", worda()[1],
+                            class="btn action-button shiny-bound-input",
+                            onclick=button1Click, accesskey="Ctrl + 1")
+                ,tags$button(type="button", id="word()[2]", worda()[2],
+                             class="btn action-button shiny-bound-input",
+                             onclick=button2Click)
+                ,tags$button(type="button", id="word()[3]", worda()[3],
+                             class="btn action-button shiny-bound-input",
+                             onclick=button3Click)
+            )
+        })
     }    
 )

@@ -52,7 +52,7 @@ babble<-function(intext,N){
     for(i in 1:N){
         wordnext <- na2commons(predict_w4(intext,tot.freqs)[1])
         phrase <- ifelse(phrase == "", wordnext, paste(phrase,wordnext))
-        intext <- phrase
+        intext <- paste(intext,phrase)
     }
     cat(print(phrase))
     phrase

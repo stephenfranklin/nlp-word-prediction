@@ -13,4 +13,3 @@ shinyUI(pageWithSidebar(
         uiOutput("uiOutputPanel")
     )
 ))
-

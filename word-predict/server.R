@@ -23,7 +23,7 @@ random_4gram <- function(){
 
 fix_apo <- function(word){
     ## fix the apostrophe in contractions.
-    wordN <- ifelse(grepl("'",word),sub("'", "\\'",word,fixed=T),word)
+    wordN <- ifelse(grepl("'",word),gsub("'", "\\'",word,fixed=T),word)
     wordN
 }
 
@@ -47,10 +47,22 @@ insert_choice <- function(word, end_space){
         sep='')
 }
 
+babble<-function(intext,N){
+    phrase <- ""
+    for(i in 1:N){
+        wordnext <- na2commons(predict_w4(intext,tot.freqs)[1])
+        phrase <- ifelse(phrase == "", wordnext, paste(phrase,wordnext))
+        intext <- phrase
+    }
+    cat(print(phrase))
+    phrase
+}
+
 shinyServer(
     function(input, output, session) {
+        r4gram <- reactive(random_4gram())
         output$text7 <- renderText({
-            if (input$random.btn==0) random_4gram()
+            if (input$random.btn==0) r4gram()
             else random_4gram()
         })
         
@@ -58,22 +70,26 @@ shinyServer(
         word <- reactive(predict_w4(intext(),tot.freqs)[1:3])
         worda <- reactive( na2commons(word()) )
         end_space <- reactive( grepl(" $", intext()) )
-                
+        
         output$uiOutputPanel <- renderUI({
             button1Click <- insert_choice(fix_apo(worda()[1]),end_space())
             button2Click <- insert_choice(fix_apo(worda()[2]),end_space())
             button3Click <- insert_choice(fix_apo(worda()[3]),end_space())
-
+            buttonRClick <- insert_choice(fix_apo(babble(intext(),3)),end_space())
+            
             tags$div(
-                tags$button(type="button", id="word()[1]", worda()[1],
+                tags$button(type="button", id="word1but", worda()[1],
                             class="btn action-button shiny-bound-input",
                             onclick=button1Click, accesskey="Ctrl + 1")
-                ,tags$button(type="button", id="word()[2]", worda()[2],
+                ,tags$button(type="button", id="word2but", worda()[2],
                              class="btn action-button shiny-bound-input",
                              onclick=button2Click)
-                ,tags$button(type="button", id="word()[3]", worda()[3],
+                ,tags$button(type="button", id="word3but", worda()[3],
                              class="btn action-button shiny-bound-input",
                              onclick=button3Click)
+                ,tags$button(type="button", id="randombut", "babble",
+                             class="btn action-button shiny-bound-input",
+                             onclick=buttonRClick)
             )
         })
     }    

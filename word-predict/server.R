@@ -47,14 +47,16 @@ insert_choice <- function(word, end_space){
         sep='')
 }
 
-babble<-function(intext,N=1,random=FALSE){
+babble<-function(intext,N,top){
     phrase <- ""
     for(i in 1:N){
-        wordnext <- na2commons(predict_w4(intext,tot.freqs)[1])
+        ifelse(top,
+               wordnext <- na2commons(predict_w4(intext,tot.freqs)[1]),
+               wordnext <- na2commons(predict_w4(intext,tot.freqs)[round(runif(1,1,3),0)])
+        )
         phrase <- ifelse(phrase == "", wordnext, paste(phrase,wordnext))
         intext <- paste(intext,phrase)
     }
-    #cat(print(phrase))
     phrase
 }
 
@@ -76,7 +78,7 @@ shinyServer(
             button2Click <- insert_choice(fix_apo(worda()[2]),end_space())
             button3Click <- insert_choice(fix_apo(worda()[3]),end_space())
             buttonRClick <- insert_choice(fix_apo(babble(intext(),
-                             input$num_bab)),end_space())
+                             input$num_bab,input$rand_bab)),end_space())
             
             tags$div(
                 tags$button(type="button", id="word1but", worda()[1],

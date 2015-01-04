@@ -53,7 +53,7 @@ insert_choice <- function(word, end_space){
         sep='')
 }
 
-babble<-function(intext,N,top){
+babble<-function(intext,N=1,top=TRUE){
     phrase <- ""
     for(i in 1:N){
         ifelse(top,
@@ -83,13 +83,11 @@ shinyServer(
         worda <- reactive( na2commons(word()) )
         end_space <- reactive( grepl(" $", intext()) )
         
-        output$uiOutputPanel <- renderUI({
+        output$topPanel <- renderUI({
             button1Click <- insert_choice(fix_apo(worda()[1]),end_space())
             button2Click <- insert_choice(fix_apo(worda()[2]),end_space())
             button3Click <- insert_choice(fix_apo(worda()[3]),end_space())
-            buttonRClick <- insert_choice(fix_apo(babble(intext(),
-                             input$num_bab,input$rand_bab)),end_space())
-            
+
             tags$div(
                 tags$button(type="button", id="word1but", worda()[1],
                             class="btn action-button shiny-bound-input",
@@ -100,7 +98,13 @@ shinyServer(
                 ,tags$button(type="button", id="word3but", worda()[3],
                              class="btn action-button shiny-bound-input",
                              onclick=button3Click)
-                ,tags$button(type="button", id="randombut", "babble",
+            )
+        })
+        output$bottomPanel <- renderUI({
+            buttonRClick <- insert_choice(fix_apo(babble(intext(),
+                                input$num_bab,input$rand_bab)),end_space())
+            tags$div(
+                tags$button(type="button", id="randombut", "Babble",
                              class="btn action-button shiny-bound-input",
                              onclick=buttonRClick)
                 ,tags$button(type="button", id="clearbut", "Clear",

@@ -14,12 +14,12 @@ load("tot.freqs_100_10w.RData")
 ### That loads the data.table of 4grams and frequencies
 ### `tot.freqs`
 
-random_4gram <- function(){
-    n_tot <- nrow(tot.freqs)
-    randnum<-round(runif(1,1,n_tot),0)
-    r4gram <- tot.freqs$ngrams[randnum]
-    r4gram
-}
+# random_4gram <- function(){
+#     n_tot <- nrow(tot.freqs)
+#     randnum<-round(runif(1,1,n_tot),0)
+#     r4gram <- tot.freqs$ngrams[randnum]
+#     r4gram
+# }
 
 fix_apo <- function(word){
     ## fix the apostrophe in contractions.
@@ -28,10 +28,16 @@ fix_apo <- function(word){
 }
 
 na2commons <- function(word){
+    ## `word` is a list of words.
     commons <- c("the", "be", "to", "of", "and", "a")
-    for(i in 1:length(word))
-        if(is.na(word[i]) | grepl("^na$",word[i], ignore.case=T))
-            word[i] <- commons[i]
+    if(length(word)==1){
+        if(is.na(word) | grepl("^na$",word, ignore.case=T))
+            word <- commons[round(runif(1,1,6),0)]
+    } else{
+        for(i in 1:length(word))
+            if(is.na(word[i]) | grepl("^na$",word[i], ignore.case=T))
+                word[i] <- commons[i]
+    }
     word
 }
 
@@ -66,11 +72,11 @@ clear <- "$('#text1').val('');
 
 shinyServer(
     function(input, output, session) {
-        r4gram <- reactive(random_4gram())
-        output$text7 <- renderText({
-            if (input$random.btn==0) r4gram()
-            else random_4gram()
-        })
+        #r4gram <- reactive(random_4gram())
+        #output$text7 <- renderText({
+        #    if (input$random.btn==0) r4gram()
+        #    else random_4gram()
+        #})
         
         intext <- reactive({input$text1})
         word <- reactive(predict_w4(intext(),tot.freqs)[1:3])

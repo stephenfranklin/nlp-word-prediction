@@ -60,6 +60,10 @@ babble<-function(intext,N,top){
     phrase
 }
 
+clear <- "$('#text1').val('');
+        var input = $('#text1');
+        input[0].selectionStart = input[0].selectionEnd = input.val().length;"
+
 shinyServer(
     function(input, output, session) {
         r4gram <- reactive(random_4gram())
@@ -93,6 +97,9 @@ shinyServer(
                 ,tags$button(type="button", id="randombut", "babble",
                              class="btn action-button shiny-bound-input",
                              onclick=buttonRClick)
+                ,tags$button(type="button", id="clearbut", "Clear",
+                             class="btn action-button shiny-bound-input",
+                             onclick=clear)
             )
         })
     }    

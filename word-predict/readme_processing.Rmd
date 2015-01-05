@@ -1,0 +1,17 @@
+The table of 4grams and their frequencies was processed from a corpora of written English text using an R script (including some BASH commands). It took 166 minutes to process without multithreading on an Amazon EC2 r3.xlarge, and the process used about 15 GB of RAM.
+
+Some details about the data:
+
+- Made from the en_US corpora from [HC Corpora](http://www.corpora.heliohost.org/aboutcorpus.html).
+- Consisting of 557 MB of excerpts from news and blog sources as well as Twitter.
+    - Twitter: 2.4 million lines, 30 million words
+    - News: 1.0 million lines, 34 million words
+    - Blogs: 0.9 million lines, 37 million words
+- The corpora were processed into a data.table of 4grams and frequencies.
+    - data.table is only 6.1 MB
+    - Consisting of 334 thousand unique 4grams.
+
+The processing was done with R and some BASH commands.
+The code is in two files:
+obtain_corpus.R
+process_4grams.R

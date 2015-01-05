@@ -14,13 +14,6 @@ load("tot.freqs_100_10w.RData")
 ### That loads the data.table of 4grams and frequencies
 ### `tot.freqs`
 
-# random_4gram <- function(){
-#     n_tot <- nrow(tot.freqs)
-#     randnum<-round(runif(1,1,n_tot),0)
-#     r4gram <- tot.freqs$ngrams[randnum]
-#     r4gram
-# }
-
 fix_apo <- function(word){
     ## fix the apostrophe in contractions.
     wordN <- ifelse(grepl("'",word),gsub("'", "\\'",word,fixed=T),word)
@@ -72,18 +65,15 @@ clear <- "$('#text1').val('');
 
 shinyServer(
     function(input, output, session) {
-        #r4gram <- reactive(random_4gram())
-        #output$text7 <- renderText({
-        #    if (input$random.btn==0) r4gram()
-        #    else random_4gram()
-        #})
-        
+
         intext <- reactive({input$text1})
         word <- reactive(predict_w4(intext(),tot.freqs)[1:3])
         worda <- reactive( na2commons(word()) )
         end_space <- reactive( grepl(" $", intext()) )
         
         output$topPanel <- renderUI({
+            tags$script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    
             button1Click <- insert_choice(fix_apo(worda()[1]),end_space())
             button2Click <- insert_choice(fix_apo(worda()[2]),end_space())
             button3Click <- insert_choice(fix_apo(worda()[3]),end_space())
@@ -91,7 +81,7 @@ shinyServer(
             tags$div(
                 tags$button(type="button", id="word1but", worda()[1],
                             class="btn action-button shiny-bound-input",
-                            onclick=button1Click, accesskey="Ctrl + 1")
+                            onclick=button1Click)
                 ,tags$button(type="button", id="word2but", worda()[2],
                              class="btn action-button shiny-bound-input",
                              onclick=button2Click)
@@ -99,6 +89,7 @@ shinyServer(
                              class="btn action-button shiny-bound-input",
                              onclick=button3Click)
             )
+
         })
         output$bottomPanel <- renderUI({
             buttonRClick <- insert_choice(fix_apo(babble(intext(),

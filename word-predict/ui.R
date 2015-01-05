@@ -15,15 +15,10 @@ shinyUI(fluidPage(
         
     ),
     sidebarPanel(
-        tabsetPanel(id = "explanation", position="above"
-            ,tabPanel("Prediction", includeText("prediction"))
-            ,tabPanel("Processing the Data", includeText("processing"))
-        #    width=3
-        #textInput(inputId="text1", label = "Enter text here"),
-        #tags$head(tags$style(type="text/css", "#text1 {width: 90%}")),
-        #,actionButton('random.btn', 'Random 4gram')
-        #,p()
-        #,textOutput('text7')
+        width=6
+        ,tabsetPanel(id = "explanation", position="above"
+            ,tabPanel("Prediction", includeHTML("readme_prediction.html"))
+            ,tabPanel("Processing the Data", includeHTML("readme_processing.html"))
         )
     )
 ))

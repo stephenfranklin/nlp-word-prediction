@@ -1,0 +1,27 @@
+The prediction algorithm uses a table (an R 'data.table') of 4grams with frequencies of occurrence. (In Natural Linguistic Processing, a 4gram is a string of 4 words.) The simple explanation is that we look at the last three words of the input, search for a 4gram that begins with those three words in order, and return the 4th word. The actual algorithm has some additional features:
+
+- The data.table has a column for each of the four words in the 4gram (w1, w2, w3, & w4), so we can compare the input phrase (just the last 3 words, actually) to any combination of the words in the table. Here's how we do that:
+
+- Check the input for 1, 2, or 3+ words.
+    - If there is only 1 word, compare that to all subsequent words in the table. That is, find the input word in w1 and return the top frequencies for w2. Then find the input word in w2 and return the top frequencies for w3. Then do the same for w3 with w4. 
+    - If there are 2 words, compare that bigram to w1:w2 and return the frequencies for w3. Then do that for w2:w3, returning w4.
+    - If there are 3 or more words, take only the last 3 words, and compare that to w1:w3 and return the frequencies of w4.
+
+- Use a back-off strategy 
+    - If the trigram prediction returns 0, back off to a bigram prediction
+    - If the bigram prediction returns 0, then back off to a unigram prediction.
+
+One non-ideal situation is when no result is predicted (or less than three results). In this case, we just replace the 'NA' result with the three most common words in English: "the", "be", "to".
+
+The 'babble' function simply repeats the algorithm automatically. By default, it chooses the most probable of three choices, but the user can set it to choose randomly from one the top three results.
+
+When the babble function runs into a non-prediction (NA) it returns randomly one of the six most common English words: "the", "be", "to", "of", "and", "a". Again, that is not ideal and sometimes results in grammatically incorrect phrases. One disadvantage of choosing from the top three results is an increased chance of getting a non-prediction and thus one those six words. The disadvantage of exclusively choosing the top result is an increased chance of forming an infinitely repeating phrase.
+
+The obvious way to reduce the occurence of non-predictions is to include more data, which requires more disk space, and also increases the app's response time.
+
+##### Future Improvements to the App:
+
+- Create a hash table to speed up the app's response time.
+- Create a second table of word-pair associations. That is, words that might often appear in the same paragraph but not within 3 words of each other.
+
+

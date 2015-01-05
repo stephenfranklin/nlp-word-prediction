@@ -11,7 +11,7 @@ Some details about the data:
     - data.table is only 6.1 MB
     - Consisting of 334 thousand unique 4grams.
 
-The processing was done with R and some BASH commands.
-The code is in two files:
-obtain_corpus.R
-process_4grams.R
+The processing was done with R and some BASH commands.  
+
+[obtain_corpus.R](https://github.com/stephenfranklin/nlp-word-prediction/blob/master/word-predict/obtain_corpus.R)  
+[process_4grams.R](https://github.com/stephenfranklin/nlp-word-prediction/blob/master/word-predict/process_4grams.R)

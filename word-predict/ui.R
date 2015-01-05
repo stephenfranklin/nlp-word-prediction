@@ -17,8 +17,8 @@ shinyUI(fluidPage(
     sidebarPanel(
         width=6
         ,tabsetPanel(id = "explanation", position="above"
-            ,tabPanel("Prediction", includeHTML("readme_prediction.html"))
-            ,tabPanel("Processing the Data", includeHTML("readme_processing.html"))
+            ,tabPanel("Prediction", includeMarkdown("readme_prediction.Rmd"))
+            ,tabPanel("Processing the Data", includeMarkdown("readme_processing.Rmd"))
         )
     )
 ))

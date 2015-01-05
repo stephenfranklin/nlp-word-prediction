@@ -24,4 +24,7 @@ The obvious way to reduce the occurence of non-predictions is to include more da
 - Create a hash table to speed up the app's response time.
 - Create a second table of word-pair associations. That is, words that might often appear in the same paragraph but not within 3 words of each other.
 
+The code for the app is in two files 'server.R' and 'ui.R'.
+[See the code at github.](https://github.com/stephenfranklin/nlp-word-prediction/tree/master/word-predict)
+
 

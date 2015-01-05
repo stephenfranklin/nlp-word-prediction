@@ -13,5 +13,5 @@ Some details about the data:
 
 The processing was done with R and some BASH commands.  
 
-[obtain_corpus.R](https://github.com/stephenfranklin/nlp-word-prediction/blob/master/word-predict/obtain_corpus.R)  
-[process_4grams.R](https://github.com/stephenfranklin/nlp-word-prediction/blob/master/word-predict/process_4grams.R)
+[obtain_corpus.R](https://github.com/stephenfranklin/nlp-word-prediction/blob/master/obtain_corpus.R)  
+[process_4grams.R](https://github.com/stephenfranklin/nlp-word-prediction/blob/master/process_4grams.R)
